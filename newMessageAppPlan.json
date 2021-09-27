@@ -28,18 +28,29 @@
     "resources": [
         {
             "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "app",
             "name": "[parameters('serverfarms')]",
             "apiVersion": "2020-12-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "name": "[parameters('serverfarms')]",
-                "computeMode": "Dynamic"
+                "perSiteScaling": false,
+                "reserved": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
             }
         },
         {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "locationproc",
+            "name": "messagesproc",
             "apiVersion": "2020-12-01",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -62,52 +73,10 @@
                         {
                             "name": "EventHubConnStr",
                             "value": "[listkeys(variables('authEventHub'), '2017-04-01').primaryConnectionString]"
-                        },
-                        {
-                            "name": "FUNCTION_APP_EDIT_MODE",
-                            "value": "readwrite"
-                        },
-                        {
-                            "name": "FUNCTIONS_EXTENSION_VERSION",
-                            "value": "~3"
-                        }
-                    ]
-                }
-            },
-            "dependsOn": [
-                "[parameters('serverfarms')]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "kind": "functionapp",
-            "name": "driveproc",
-            "apiVersion": "2020-12-01",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms'))]",
-                "clientAffinityEnabled": false,
-                "siteConfig": {
-                    "appSettings": [
-                        {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsight')), '2020-02-02').InstrumentationKey]"
-                        },
-                        {
-                            "name": "PrivateStorageAccount",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountNameApp'), ';AccountKey=', listKeys(variables('storageAccountidApp'),'2015-05-01-preview').key1)]"
-                        },
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountNamePlatform'), ';AccountKey=', listKeys(variables('storageAccountidPlatform'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "DocumentDbConnStr",
                             "value": "[concat('AccountEndpoint=https://', parameters('documentDB'), '.documents.azure.com:443/;AccountKey=', listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('documentDB')), '2015-04-08').primaryMasterKey,';')]"
-                        },
-                        {
-                            "name": "EventHubConnStr",
-                            "value": "[listkeys(variables('authEventHub'), '2017-04-01').primaryConnectionString]"
                         },
                         {
                             "name": "FUNCTION_APP_EDIT_MODE",

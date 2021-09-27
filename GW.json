@@ -118,7 +118,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('templateBaseUrl'), 'newDynamicPlan.json')]"
+                    "uri": "[uri(variables('templateBaseUrl'), 'newDriveAppPlan.json')]"
                 },
                 "parameters": {
                     "serverfarms": { "value": "[variables('dynamicPlan')]" },
@@ -142,7 +142,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(variables('templateBaseUrl'), 'newAppServicePlan.json')]"
+                    "uri": "[uri(variables('templateBaseUrl'), 'newMessageAppPlan.json')]"
                 },
                 "parameters": {
                     "serverfarms": { "value": "[variables('appServicePlan')]" },
