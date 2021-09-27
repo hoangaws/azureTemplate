@@ -50,7 +50,7 @@
         {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "messagesproc",
+            "name": "[concat(parameters('serverfarms'),'-message')]",
             "apiVersion": "2020-12-01",
             "location": "[resourceGroup().location]",
             "properties": {

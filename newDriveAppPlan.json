@@ -50,7 +50,7 @@
         {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "locationproc",
+            "name": "[concat(parameters('serverfarms'),'-location')]",
             "apiVersion": "2020-12-01",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -92,7 +92,7 @@
         {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "driveproc",
+            "name": "[concat(parameters('serverfarms'),'-drive')]",
             "apiVersion": "2020-12-01",
             "location": "[resourceGroup().location]",
             "properties": {
