@@ -8,7 +8,7 @@
         "appInsight": {
             "type": "String"
         },
-        "storage": {
+        "storageAccountName": {
             "type": "String"
         },
         "documentDB": {
@@ -57,11 +57,11 @@
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storage'), ';AccountKey=', listKeys(parameters('storage'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(parameters('storageAccountName'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "PrivateStorageAccount",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storage'), ';AccountKey=', listKeys(parameters('storage'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(parameters('storageAccountName'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "EventHubConnStr",

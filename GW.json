@@ -13,7 +13,7 @@
         "iothub": "[concat(parameters('prefix'),'-iothub')]",
 
         "documentDB": "[concat(parameters('prefix'),'-db')]",
-        "storageAccount": "[concat(parameters('prefix'),'storage')]",
+        "storageAccountName": "[concat(parameters('prefix'),'gwdata')]",
         "driveAppInsight": "[concat(parameters('prefix'),'-dlogs')]",
         "messagesAppInsight": "[concat(parameters('prefix'),'-mlogs')]",
 
@@ -72,14 +72,14 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
-            "name": "[variables('storageAccount')]",
+            "name": "[variables('storageAccountName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(variables('templateBaseUrl'), 'newStorageAccount.json')]"
                 },
                 "parameters": {
-                    "storageAccountName": { "value": "[variables('storageAccount')]" }
+                    "storageAccountName": { "value": "[variables('storageAccountName')]" }
                 }
             }
         },
@@ -123,18 +123,19 @@
                 "parameters": {
                     "serverfarms": { "value": "[variables('dynamicPlan')]" },
                     "appInsight": { "value": "[variables('driveAppInsight')]" },
-                    "storage": { "value": "[variables('storageAccount')]" },
+                    "storageAccountName": { "value": "[variables('storageAccountName')]" },
                     "documentDB": { "value": "[variables('documentDB')]" },
                     "eventhubNS": { "value": "[variables('eventhubNS')]" }
                 }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', variables('driveAppInsight'))]",
-                "[resourceId('Microsoft.Resources/deployments', variables('storageAccount'))]",
-                "[resourceId('Microsoft.Resources/deployments', variables('documentDB'))]",
-                "[resourceId('Microsoft.Resources/deployments', variables('eventhubNS'))]"
+                "[resourceId('Microsoft.Resources/deployments', variables('eventhubNS'))]",
+                "[resourceId('Microsoft.Resources/deployments', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.Resources/deployments', variables('documentDB'))]"
             ]
-        },{
+        },
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
             "name": "[variables('appServicePlan')]",
@@ -146,16 +147,16 @@
                 "parameters": {
                     "serverfarms": { "value": "[variables('appServicePlan')]" },
                     "appInsight": { "value": "[variables('messagesAppInsight')]" },
-                    "storage": { "value": "[variables('storageAccount')]" },
+                    "storageAccountName": { "value": "[variables('storageAccountName')]" },
                     "documentDB": { "value": "[variables('documentDB')]" },
                     "eventhubNS": { "value": "[variables('eventhubNS')]" }
                 }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', variables('messagesAppInsight'))]",
-                "[resourceId('Microsoft.Resources/deployments', variables('storageAccount'))]",
-                "[resourceId('Microsoft.Resources/deployments', variables('documentDB'))]",
-                "[resourceId('Microsoft.Resources/deployments', variables('eventhubNS'))]"
+                "[resourceId('Microsoft.Resources/deployments', variables('eventhubNS'))]",
+                "[resourceId('Microsoft.Resources/deployments', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.Resources/deployments', variables('documentDB'))]"
             ]
         }
     ]
