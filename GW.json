@@ -11,6 +11,9 @@
         "eventhubNS": "[concat(parameters('prefix'),'-gw-stream')]",
 
         "iothub": "[concat(parameters('prefix'),'iothub')]",
+        "authorizationDrive": "[concat(parameters('prefix'),'iothub')]",
+        "authorizationMessage": "[concat(parameters('prefix'),'iothub')]",
+
         "locationCG": "[concat(parameters('prefix'),'locationCG')]",
         "storageAccount": "[concat(parameters('prefix'),'storage')]",
         "driveAppInsight": "[concat(parameters('prefix'),'-dlogs')]",
@@ -23,6 +26,39 @@
         "messagesFunction": "[concat(parameters('prefix'),'-messagesproc')]"
     },
     "resources": [
-        
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "[variables('eventhubNS')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(variables('templateBaseUrl'), 'newEventhubNS.json')]"
+                },
+                "parameters": {
+                    "eventHubNSName": {
+                        "value": "[variables('eventhubNS')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "[variables('iothub')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(variables('templateBaseUrl'), 'newIoTHubs.json')]"
+                },
+                "parameters": {
+                    "iotHubName": { "value": "[variables('iothub')]" },
+                    "eventHubNSName": { "value": "[variables('eventhubNS')]" }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('eventhubNS'))]"
+            ]
+        }
     ]
 }

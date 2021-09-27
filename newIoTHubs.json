@@ -2,27 +2,22 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "name": {
+        "iotHubName": {
             "type": "String"
         },
-        "eventhubNS": {
-            "type": "String"
-        },
-        "eventhubNameIoTdrive": {
-            "type": "String"
-        },
-        "eventhubNameIoTmessage": {
+        "eventHubNSName": {
             "type": "String"
         }
     },
     "variables": {
-        "sendPolicy": "[concat('iothubroutes_',parameters('name'))]"
+        "eventhubNameIoTdrive": "[concat(parameters('eventHubNSName'), '/iot-drive/', 'iothubroutes_drive')]",
+        "eventhubNameIoTmessage": "[concat(parameters('eventHubNSName'), '/iot-messages/', 'iothubroutes_messages')]"
     },
     "resources": [
         {
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2021-07-01-preview",
-            "name": "[parameters('name')]",
+            "name": "[parameters('iotHubName')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "S1",
@@ -40,13 +35,13 @@
                     "endpoints": {
                         "eventHubs": [
                             {
-                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhubNS'), parameters('eventhubNameIoTdrive'), variables('sendPolicy')), '2017-04-01').primaryConnectionString]",
+                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventhubNameIoTdrive')), '2017-04-01').primaryConnectionString]",
                                 "name": "iot-drive",
                                 "subscriptionId": "[subscription().subscriptionId]",
                                 "resourceGroup": "[resourceGroup().name]"
                             },
                             {
-                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhubNS'), parameters('eventhubNameIoTmessage'), variables('sendPolicy')), '2017-04-01').primaryConnectionString]",
+                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventhubNameIoTmessage')), '2017-04-01').primaryConnectionString]",
                                 "name": "iot-message",
                                 "subscriptionId": "[subscription().subscriptionId]",
                                 "resourceGroup": "[resourceGroup().name]"
