@@ -10,7 +10,7 @@
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs",
             "name": "[parameters('name')]",
-            "apiVersion": "2017-04-01",
+            "apiVersion": "2021-01-01-preview",
             "location": "[resourceGroup().location]",
             "properties": {
                 "messageRetentionInDays": 7,
