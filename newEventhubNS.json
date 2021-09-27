@@ -1,0 +1,105 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "eventHubNSName": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.EventHub/namespaces",
+            "name": "[parameters('eventHubNSName')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 8
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "name": "[concat(parameters('eventHubNSName'), '/iot-drive')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 8
+            },
+            "dependsOn": [
+                "[parameters('eventHubNSName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "name": "[concat(parameters('eventHubNSName'), '/iot-messages')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 8
+            },
+            "dependsOn": [
+                "[parameters('eventHubNSName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+            "name": "[concat(parameters('eventHubNSName'), '/iot-drive/', 'iothubroutes_drive')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "rights": [
+                    "Send"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNSName'), 'iot-drive')]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+            "name": "[concat(parameters('eventHubNSName'), '/iot-messages/', 'iothubroutes_messages')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "rights": [
+                    "Send"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNSName'), 'iot-messages')]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "name": "[concat(parameters('eventHubNSName'), '/iot-drive/', 'location')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {},
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNSName'), 'iot-drive')]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "name": "[concat(parameters('eventHubNSName'), '/iot-drive/', '$Default')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {},
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNSName'), 'iot-drive')]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "name": "[concat(parameters('eventHubNSName'), '/iot-messages/', '$Default')]",
+            "apiVersion": "2021-01-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {},
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNSName'), 'iot-messages')]"
+            ]
+        }
+    ]
+}

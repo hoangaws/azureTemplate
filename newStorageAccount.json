@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "location": "[resourceGroup().location]",
+            "name": "[parameters('storageAccountName')]",
+            "sku": {
+                "name": "Standard_LRS"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(parameters('storageAccountName'), '/default/sensordata')]",
+            "properties": {
+                "publicAccess": "Container"
+            },
+            "dependsOn": [
+                "[parameters('storageAccountName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
+            "name": "[concat(parameters('storageAccountName'), '/default/trip-queue')]",
+            "apiVersion": "2019-06-01",
+            "properties": {
+                "metadata": {}
+            },
+            "dependsOn": [
+                "[parameters('storageAccountName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+            "name": "[concat(parameters('storageAccountName'), '/default/lastLocationByDevice')]",
+            "apiVersion": "2019-06-01",
+            "dependsOn": [
+                "[parameters('storageAccountName')]"
+            ]
+        }
+    ],
+    "outputs": {},
+    "functions": []
+}
