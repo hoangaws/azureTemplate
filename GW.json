@@ -10,9 +10,7 @@
         "templateBaseUrl": "https://raw.githubusercontent.com/hoangaws/azureTemplate/main/",
         "eventhubNS": "[concat(parameters('prefix'),'-gw-stream')]",
 
-        "iothub": "[concat(parameters('prefix'),'iothub')]",
-        "authorizationDrive": "[concat(parameters('prefix'),'iothub')]",
-        "authorizationMessage": "[concat(parameters('prefix'),'iothub')]",
+        "iothub": "[concat(parameters('prefix'),'-iothub')]",
 
         "locationCG": "[concat(parameters('prefix'),'locationCG')]",
         "storageAccount": "[concat(parameters('prefix'),'storage')]",
