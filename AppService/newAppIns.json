@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Insights/components",
+            "name": "[parameters('name')]",
+            "apiVersion": "2020-02-02",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "Application_Type" : "other"
+            }
+        }
+    ]
+}
