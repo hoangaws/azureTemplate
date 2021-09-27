@@ -2,9 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "name": {
-            "type": "String"
-        },
         "serverfarms": {
             "type": "String"
         },
@@ -23,9 +20,30 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "app",
+            "name": "[parameters('serverfarms')]",
+            "apiVersion": "2020-12-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "name": "[parameters('serverfarms')]",
+                "perSiteScaling": false,
+                "reserved": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
+            }
+        },
+        {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "[parameters('name')]",
+            "name": "messagesproc",
             "apiVersion": "2020-12-01",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -46,12 +64,12 @@
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storage'), ';AccountKey=', listKeys(parameters('storage'),'2015-05-01-preview').key1)]"
                         },
                         {
-                            "name": "DocumentDbConnStr",
-                            "value": "[concat('AccountEndpoint=https://', parameters('documentDB'), '.documents.azure.com:443/;AccountKey=', listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('documentDB')), '2015-04-08').primaryMasterKey,';')]"
-                        },
-                        {
                             "name": "EventHubConnStr",
                             "value": "[listkeys(parameters('eventhubNS'), parameters('eventhubNS')).primaryConnectionString]"
+                        },
+                        {
+                            "name": "DocumentDbConnStr",
+                            "value": "[concat('AccountEndpoint=https://', parameters('documentDB'), '.documents.azure.com:443/;AccountKey=', listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('documentDB')), '2015-04-08').primaryMasterKey,';')]"
                         },
                         {
                             "name": "FUNCTION_APP_EDIT_MODE",
@@ -63,7 +81,10 @@
                         }
                     ]
                 }
-            }
+            },
+            "dependsOn": [
+                "[parameters('serverfarms')]"
+            ]
         }
     ]
 }
