@@ -33,13 +33,13 @@
                     "endpoints": {
                         "eventHubs": [
                             {
-                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNSName'), '/iot-drive/', 'iothubroutes_drive'), '2017-04-01').primaryConnectionString]",
+                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNSName'), 'iot-drive', 'iothubroutes_drive'), '2017-04-01').primaryConnectionString]",
                                 "name": "iot-drive",
                                 "subscriptionId": "[subscription().subscriptionId]",
                                 "resourceGroup": "[resourceGroup().name]"
                             },
                             {
-                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNSName'), '/iot-messages/', 'iothubroutes_messages'), '2017-04-01').primaryConnectionString]",
+                                "connectionString": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNSName'), 'iot-messages', 'iothubroutes_messages'), '2017-04-01').primaryConnectionString]",
                                 "name": "iot-message",
                                 "subscriptionId": "[subscription().subscriptionId]",
                                 "resourceGroup": "[resourceGroup().name]"
