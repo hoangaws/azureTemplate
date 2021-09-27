@@ -17,8 +17,8 @@
         "driveAppInsight": "[concat(parameters('prefix'),'-dlogs')]",
         "messagesAppInsight": "[concat(parameters('prefix'),'-mlogs')]",
 
-        "dynamicPlan": "[concat(parameters('prefix'),'-dynamicPlan')]",
-        "appServicePlan": "[concat(parameters('prefix'),'-appPlan')]"
+        "drivePlan": "[concat(parameters('prefix'),'-drivePlan')]",
+        "messagePlan": "[concat(parameters('prefix'),'-messagePlan')]"
     },
     "resources": [
         {
@@ -114,14 +114,14 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
-            "name": "[variables('dynamicPlan')]",
+            "name": "[variables('drivePlan')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(variables('templateBaseUrl'), 'newDriveAppPlan.json')]"
                 },
                 "parameters": {
-                    "serverfarms": { "value": "[variables('dynamicPlan')]" },
+                    "serverfarms": { "value": "[variables('drivePlan')]" },
                     "appInsight": { "value": "[variables('driveAppInsight')]" },
                     "storageAccountName": { "value": "[variables('storageAccountName')]" },
                     "documentDB": { "value": "[variables('documentDB')]" },
@@ -138,14 +138,14 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
-            "name": "[variables('appServicePlan')]",
+            "name": "[variables('messagePlan')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(variables('templateBaseUrl'), 'newMessageAppPlan.json')]"
                 },
                 "parameters": {
-                    "serverfarms": { "value": "[variables('appServicePlan')]" },
+                    "serverfarms": { "value": "[variables('messagePlan')]" },
                     "appInsight": { "value": "[variables('messagesAppInsight')]" },
                     "storageAccountName": { "value": "[variables('storageAccountName')]" },
                     "documentDB": { "value": "[variables('documentDB')]" },
