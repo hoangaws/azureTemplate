@@ -11,7 +11,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "kind": "StorageV2",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2021-04-01",
             "location": "[resourceGroup().location]",
             "name": "[parameters('storageAccountName')]",
             "sku": {
@@ -20,7 +20,7 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2021-04-01",
             "name": "[concat(parameters('storageAccountName'), '/default/sensordata')]",
             "properties": {
                 "publicAccess": "Container"
@@ -32,7 +32,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts/queueServices/queues",
             "name": "[concat(parameters('storageAccountName'), '/default/trip-queue')]",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2021-04-01",
             "properties": {
                 "metadata": {}
             },
@@ -43,7 +43,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
             "name": "[concat(parameters('storageAccountName'), '/default/lastLocationByDevice')]",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2021-04-01",
             "dependsOn": [
                 "[parameters('storageAccountName')]"
             ]

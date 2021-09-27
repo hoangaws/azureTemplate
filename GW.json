@@ -79,7 +79,7 @@
                     "uri": "[uri(variables('templateBaseUrl'), 'newStorageAccount.json')]"
                 },
                 "parameters": {
-                    "name": { "value": "[variables('storageAccount')]" }
+                    "storageAccountName": { "value": "[variables('storageAccount')]" }
                 }
             }
         },
